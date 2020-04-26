@@ -11,6 +11,7 @@
     <div class="container">
         <p id="title" href="#confidenceLevel">NFT Marker Creator</p>
         <input type="file" id="imageLoader" name="imageLoader" style="display: none;"/>
+        <input type="email" id="email" name="email"/>
         <button id="uploadBt" onclick="document.getElementById('imageLoader').click();" class="bt">Upload Image</button>
         <button id="generateBt" onclick="generate()" class="bt" disabled>Generate</button>
         <div id="wrapper">
@@ -53,6 +54,7 @@
 
     <!-- <script src="PNGReader.js"></script> -->
     <script src="exif.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type='text/javascript'>
           var artoolkit_wasm_url = './wasm/NftMarkerCreator_wasm.wasm';
     </script>

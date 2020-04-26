@@ -18,7 +18,8 @@ var globalObj = {
     nc: 0,
     w: 0,
     h: 0,
-    arr: []
+    arr: [],
+    ext: '.jpg'
 }
 
 function handleImage(e) {
@@ -36,8 +37,10 @@ function handleImage(e) {
     }
 
     if (extJpg == '.jpg' || extJpg == '.jpeg' || extJpg == '.JPG' || extJpg == '.JPEG') {
+        globalObj.ext = '.jpg'
         useJpeg(e);
     } else if (extJpg == '.png' || extJpg == '.PNG') {
+        globalObj.ext = '.png'
         globalObj.dpi = 72;
         readImage(e)
     } else {
@@ -53,6 +56,17 @@ function generate() {
 
     var spinner = document.querySelector('.spinner-container');
     spinner.style.display = 'block';
+
+    axios.post('http://localhost:3000/create',
+      {
+        globalObj: globalObj,
+      }
+    ).then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 
     setTimeout(() => {
         let cmdArr = [0, name];
