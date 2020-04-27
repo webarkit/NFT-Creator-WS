@@ -123,7 +123,11 @@ function runtime() {
     let contentFset = Module.FS.readFile(filenameFset);
     let contentFset3 = Module.FS.readFile(filenameFset3);
     const nftPath = `/nft/${imageData.email}`
-    const filePath = path.join(__dirname, '/output/') + fileName
+    const dir = path.join(__dirname, '/output/')
+    const filePath = dir + fileName
+    if (!fs.existsSync(dir)){
+      fs.mkdirSync(dir);
+    })
     fs.writeFileSync(filePath + ext, content);
     fs.writeFileSync(filePath + ext2, contentFset);
     fs.writeFileSync(filePath + ext3, contentFset3);
