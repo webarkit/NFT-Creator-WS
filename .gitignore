@@ -1,6 +1,5 @@
 node_modules/*
 input/*
-output/*
 package-lock.json
 .vscode/*
 
