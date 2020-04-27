@@ -127,7 +127,7 @@ function runtime() {
     const filePath = dir + fileName
     if (!fs.existsSync(dir)){
       fs.mkdirSync(dir);
-    })
+    }
     fs.writeFileSync(filePath + ext, content);
     fs.writeFileSync(filePath + ext2, contentFset);
     fs.writeFileSync(filePath + ext3, contentFset3);
