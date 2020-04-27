@@ -6,6 +6,45 @@ const inkjet = require('inkjet');
 const PNG = require('pngjs').PNG;
 var artoolkit_wasm_url = './libs/NftMarkerCreator_wasm.wasm';
 var Module = {};
+require('dotenv').config()
+const Client = require('ftp');
+const uuidv4 = require('uuid/v4');
+
+let ftpReady = false
+
+const client = new Client();
+client.on('ready', () => {
+  console.log('ftp ready')
+  ftpReady = true
+})
+
+client.on('error', (err) => {
+  console.error(err)
+})
+client.connect({
+  host: process.env.FTP_SERVER,
+  user: process.env.FTP_USER,
+  password: process.env.FTP_PW
+})
+
+//Setup emailing
+const nodemailer = require('nodemailer');
+const transporter = nodemailer.createTransport({
+  pool: true,
+  host: process.env.EMAIL_HOST,
+  port: 465,
+  secure: true, // use TLS
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.EMAIL_PW
+  }
+});
+
+transporter.verify().then(() => {
+  console.log("Email success")
+}).catch(err => {
+  console.error("Email err:" + err)
+})
 
 // GLOBAL VARs
 var params = [
@@ -33,74 +72,14 @@ var imageData = {
     nc: 0,
     dpi: 0,
     array: [],
-    ext: ''
+    ext: '',
+    email: process.env.DEFAULT_EMAIL
 }
 
 let local = true;
 
 function runtime() {
-  if(local) {
-    for (let j = 2; j < process.argv.length; j++) {
-        if(process.argv[j].indexOf('-i') !== -1 || process.argv[j].indexOf('-I') !== -1){
-            foundInputPath.b = true;
-            foundInputPath.i = j+1;
-            j++;
-        }else if(process.argv[j] == "-noConf"){
-            noConf = true;
-        }else if(process.argv[j] == "-noDemo"){
-            noDemo = true;
-        }else {
-            params.push(process.argv[j]);
-        }
-    }
-
-    if(!foundInputPath.b){
-        console.log("\nERROR: No image in INPUT command!\n e.g:(-i /PATH/TO/IMAGE)\n");
-        process.exit(1);
-    }else{
-        srcImage = path.join(__dirname, process.argv[foundInputPath.i]);
-    }
-
-    let fileNameWithExt = path.basename(srcImage);
-    let fileName = path.parse(fileNameWithExt).name;
-    let extName = path.parse(fileNameWithExt).ext;
-
-    params[1] = fileNameWithExt;
-
-    let foundExt = false;
-    for (let ext in validImageExt) {
-        if(extName.toLowerCase() === validImageExt[ext]){
-            foundExt = true;
-            break;
-        }
-    }
-
-    if(!foundExt){
-        console.log("\nERROR: Invalid image TYPE!\n Valid types:(jpg,JPG,jpeg,JPEG,png,PNG)\n");
-        process.exit(1);
-    }
-
-    if(!fs.existsSync(srcImage)){
-        console.log("\nERROR: Not possible to read image, probably invalid image PATH!\n");
-        process.exit(1);
-    }else{
-        buffer = fs.readFileSync(srcImage);
-    }
-
-    if(!fs.existsSync(path.join(__dirname, '/output/'))){
-        fs.mkdirSync(path.join(__dirname, '/output/'));
-    }
-
-    if (extName.toLowerCase() == ".jpg" || extName.toLowerCase() == ".jpeg") {
-        useJPG(buffer)
-    } else if (extName.toLowerCase() == ".png") {
-        usePNG(buffer);
-    }
-  } 
-  else {
-    console.log('runtime', imageData.ext)
-    fileName = 'UID_name'
-  }
+  let fileName = imageData.fileName || 'nft-' + uuidv4()
   console.log('calculateQuality')
     let confidence = calculateQuality();
 
@@ -143,35 +122,64 @@ function runtime() {
     let content = Module.FS.readFile(filenameIset);
     let contentFset = Module.FS.readFile(filenameFset);
     let contentFset3 = Module.FS.readFile(filenameFset3);
+    const nftPath = `/nft/${imageData.email}`
+    const filePath = path.join(__dirname, '/output/') + fileName
+    fs.writeFileSync(filePath + ext, content);
+    fs.writeFileSync(filePath + ext2, contentFset);
+    fs.writeFileSync(filePath + ext3, contentFset3);
 
-    fs.writeFileSync(path.join(__dirname, '/output/') + fileName + ext, content);
-    fs.writeFileSync(path.join(__dirname, '/output/') + fileName + ext2, contentFset);
-    fs.writeFileSync(path.join(__dirname, '/output/') + fileName + ext3, contentFset3);
-
-    if(!noDemo){
-        console.log("\nFinished marker creation!\nNow configuring demo! \n")
-
-        let demoHTML = fs.readFileSync("./demo/nft.html").toString('utf8').split("\n");
-        addNewMarker(demoHTML, fileName);
-        let newHTML = demoHTML.join('\n');
-    
-        fs.writeFileSync("./demo/nft.html",newHTML,{encoding:'utf8',flag:'w'});
-
-        const markerDir = path.join(__dirname, '/demo/public/marker/');
-
-        const files = fs.readdirSync(markerDir);
-        for (const file of files) {
-            fs.unlink(path.join(markerDir, file), err => {
-              if (err) throw err;
+    if(ftpReady) {
+      console.log('start upload')
+      client.mkdir(nftPath, true, (err) => {
+        client.put(filePath + ext,`${nftPath}/${fileName}${ext}`,(err) => {
+          if (err) {
+            console.log(err)
+            return
+          }
+          else {
+            client.put(filePath + ext2,`${nftPath}/${fileName}${ext2}`,(err) => {
+              if (err) {
+                console.log(err)
+                return
+              }
+              else {
+                client.put(filePath + ext3,`${nftPath}/${fileName}${ext3}`,(err) => {
+                  if (err) {
+                    console.log(err)
+                    return
+                  }
+                  else {
+                    console.log('Success: Uploaded 3 files')
+                    sendEmail(nftPath+'/'+fileName)
+                  }
+                });
+              }
             });
-        }
-    
-        fs.writeFileSync(markerDir + fileName + ext, content);
-        fs.writeFileSync(markerDir + fileName + ext2, contentFset);
-        fs.writeFileSync(markerDir + fileName + ext3, contentFset3);
-    
-        console.log("Finished!\nTo run demo use: 'npm run demo'");
+          }
+        });
+      })
+
     }
+}
+
+function sendEmail(nftPath) {
+    // include nodemailer
+    const toMail = imageData.email
+    const fromMail = 'nft@webarstudio.tripod-digital.co.nz';
+    const subject = 'Link to your NFT marker';
+    const nftLink = `https://nft.tripod-digital.co.nz${nftPath}`
+    const text = `Use this link ${nftLink} inside webARStudio https://webarstudio.tripod-digital.co.nz for your NFT markers or download the markers for usage with jsartoolkit` 
+  
+      // email options
+    const mailOptions = {
+      from: fromMail,
+      to: toMail,
+      subject: subject,
+      text: text
+    };
+  
+    // send email
+    return transporter.sendMail(mailOptions)
 }
 
 function create(globalData) {
@@ -181,9 +189,9 @@ function create(globalData) {
   imageData.sizeY = globalData.h;
   imageData.array = globalData.arr;
   imageData.ext = globalData.ext;
+  imageData.email = imageData.email || process.env.DEFAULT_EMAIL
   noDemo = true
   Module = require('./libs/NftMarkerCreator_wasm.js');
-  console.log('Module')
   Module.onRuntimeInitialized = runtime
 }
 

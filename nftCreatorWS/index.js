@@ -1,10 +1,12 @@
+require('dotenv').config()
 const express = require('express');
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const path = require("path");
 const app = new express();
+const {create} = require('./app')
 
-process.title = "nftCreatorLambda";
+process.title = "nftCreatorWS";
 
 app.use(cors())
 // parse application/x-www-form-urlencoded
@@ -15,22 +17,18 @@ app.use(bodyParser.json({limit: '50mb', extended: true}))
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'docs')));
 
 app.post('/create', (req, res) => {
-  console.log(req.body.globalObj.dpi);
   createNFT(req.body.globalObj)
   return res.send('Received a POST HTTP method');
 });
 
-app.get('/', function(request, response){
-    response.sendFile(path.join(__dirname + '/nft.html'));
-});
+const PORT = process.env.PORT || 3000
+app.listen(PORT)
 
-app.listen(3000)
-
-console.log("Demo running at http://localhost:3000/");
+console.log(`Demo running at http://localhost:${PORT}/`);
 
 function createNFT(globalObj) {
-  const {create} = require('./app')
   create(globalObj)
 }

@@ -19,7 +19,7 @@ var globalObj = {
     w: 0,
     h: 0,
     arr: [],
-    ext: '.jpg'
+    ext: '.jpg',
 }
 
 function handleImage(e) {
@@ -56,30 +56,41 @@ function generate() {
 
     var spinner = document.querySelector('.spinner-container');
     spinner.style.display = 'block';
-
-    axios.post('http://localhost:3000/create',
+    globalObj.email = document.getElementById('email').value;
+    globalObj.fileName = document.getElementById('nftName').value;
+    if (!globalObj.email) {
+      alert("Please enter your email address. We use this address to send you a link to your NFTs once they have been created.")
+      return
+    } else {
+      // const url = 'http://localhost:3000/create'
+      const url = 'http://nft-creator-ws.herokuapp.com/create'
+      axios.post(url,
       {
         globalObj: globalObj,
       }
     ).then(function (response) {
+      spinner.style.display = 'none';
       console.log(response);
     })
     .catch(function (error) {
       console.log(error);
     });
+    }
 
-    setTimeout(() => {
-        let cmdArr = [0, name];
 
-        let heapSpace = Module._malloc(globalObj.arr.length * globalObj.arr.BYTES_PER_ELEMENT); // 1
-        Module.HEAPU8.set(globalObj.arr, heapSpace); // 2
 
-        Module._createImageSet(heapSpace, globalObj.dpi, globalObj.w, globalObj.h, globalObj.nc, name, cmdArr.length, cmdArr);
-        Module._free(heapSpace);
+    // setTimeout(() => {
+    //     let cmdArr = [0, name];
+
+    //     let heapSpace = Module._malloc(globalObj.arr.length * globalObj.arr.BYTES_PER_ELEMENT); // 1
+    //     Module.HEAPU8.set(globalObj.arr, heapSpace); // 2
+
+    //     Module._createImageSet(heapSpace, globalObj.dpi, globalObj.w, globalObj.h, globalObj.nc, name, cmdArr.length, cmdArr);
+    //     Module._free(heapSpace);
 
         
-        downloadIset();
-    }, 500);
+    //     downloadIset();
+    // }, 500);
 }
 
 function downloadIset() {

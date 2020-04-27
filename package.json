@@ -4,18 +4,24 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "demo": "cd demo && node demoServer.js"
+    "start": "node nftCreatorWS"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "ftp": "^0.3.10",
     "glob": "^7.1.6",
     "inkjet": "^2.1.2",
     "jpeg-js": "^0.3.6",
+    "netlify-lambda": "^1.6.3",
+    "nodemailer": "^6.4.6",
     "pngjs": "^3.4.0",
-    "readline-sync": "^1.4.10"
+    "readline-sync": "^1.4.10",
+    "serverless-http": "^2.3.2",
+    "uuid": "^7.0.3"
   }
 }

@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>NFt Marker Creator</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
     <div class="container">
         <p id="title" href="#confidenceLevel">NFT Marker Creator</p>
         <input type="file" id="imageLoader" name="imageLoader" style="display: none;"/>
-        <input type="email" id="email" name="email"/>
+        <div>Email: <input type="email" id="email" name="email"/></div>
+        <div>NFT name: <input type="text" id="nftName" name="nftName"/></div>
         <button id="uploadBt" onclick="document.getElementById('imageLoader').click();" class="bt">Upload Image</button>
         <button id="generateBt" onclick="generate()" class="bt" disabled>Generate</button>
         <div id="wrapper">
