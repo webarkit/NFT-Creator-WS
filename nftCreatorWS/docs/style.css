@@ -31,6 +31,17 @@ body {
     background-color: #023962;
 }
 
+input {
+  /* line-height: 2em; */
+  font-size: 0.8em;
+  margin: 0.1em;
+}
+
+.in {
+  margin: 0.5em;
+  font-size: 1.5em;
+}
+
 .bt[disabled] {
     opacity: 0.5;
     cursor: default;

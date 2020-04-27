@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node nftCreatorWS"
+    "start": "node nftCreatorWS",
+    "dev": "nodemon --watch nftCreatorWS"
   },
   "author": "",
   "license": "MIT",
@@ -19,6 +20,7 @@
     "jpeg-js": "^0.3.6",
     "netlify-lambda": "^1.6.3",
     "nodemailer": "^6.4.6",
+    "nodemon": "^2.0.3",
     "pngjs": "^3.4.0",
     "readline-sync": "^1.4.10",
     "serverless-http": "^2.3.2",

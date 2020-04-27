@@ -11,9 +11,11 @@
     <div class="container">
         <p id="title" href="#confidenceLevel">NFT Marker Creator</p>
         <input type="file" id="imageLoader" name="imageLoader" style="display: none;"/>
-        <div>Email: <input type="email" id="email" name="email"/></div>
-        <div>NFT name: <input type="text" id="nftName" name="nftName"/></div>
+        <div class="in">
+          Email: <input type="email" id="email" name="email"/><br/>
+        </div>
         <button id="uploadBt" onclick="document.getElementById('imageLoader').click();" class="bt">Upload Image</button>
+        <div class="in"> NFT name: <input type="text" id="nftName" name="nftName"/></div>
         <button id="generateBt" onclick="generate()" class="bt" disabled>Generate</button>
         <div id="wrapper">
             <canvas id="imageCanvas"></canvas>
@@ -37,24 +39,11 @@
         </div>
         <p id="warning"><span style="color: red">Warning:</span>
             Images with width and/or height above 1000px might take 20min+ to generate.<br>
-            For a more efficient Marker generator, please use the Node script version:
+            Thanks to the great project from <a href="https://github.com/Carnaux">Carnaux</a>
             <a href="https://github.com/Carnaux/NFT-Marker-Creator">https://github.com/Carnaux/NFT-Marker-Creator</a><br>
         </p>
     </div>
 
-    <!-- <button onclick="downloadIset()">download</button> -->
-
-    <div id="modal">
-        <div id="modalBody">
-            <p id="modalTitle">No "Number of Channels" found!</p>
-            <p id="modalTxt">Inform the number of channels(nc):<br>(black and white images have NC=1, colored images have NC=3)</p>
-            <input id="modalInput" type="number"  value="3">
-            <button id="cancelBt" class="bt modBt" onclick="closeModal()">Cancel</button>
-            <button id="confirmBt" class="bt modBt" onclick="setValueFromModal()">Confirm</button>
-        </div>
-    </div>
-
-    <!-- <script src="PNGReader.js"></script> -->
     <script src="exif.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="index.js"></script>

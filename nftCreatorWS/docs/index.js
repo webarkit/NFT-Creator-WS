@@ -20,12 +20,13 @@ var globalObj = {
     h: 0,
     arr: [],
     ext: '.jpg',
+    fileName: ''
 }
 
 function handleImage(e) {
     nameWithExt = e.target.files[0].name;
     console.log("Image uploaded: " + nameWithExt);
-
+    document.getElementById('nftName').value = name;
     name = nameWithExt.substr(0, nameWithExt.lastIndexOf('.'));
 
     let extJpg = nameWithExt.substr(nameWithExt.lastIndexOf('.'));
@@ -51,17 +52,16 @@ function handleImage(e) {
 }
 
 function generate() {
-    var imageCanvas = document.querySelector('#imageCanvas');
-    imageCanvas.style.opacity = 0.25;
-
-    var spinner = document.querySelector('.spinner-container');
-    spinner.style.display = 'block';
     globalObj.email = document.getElementById('email').value;
     globalObj.fileName = document.getElementById('nftName').value;
     if (!globalObj.email) {
       alert("Please enter your email address. We use this address to send you a link to your NFTs once they have been created.")
       return
     } else {
+      var imageCanvas = document.querySelector('#imageCanvas');
+      imageCanvas.style.opacity = 0.25;
+      var spinner = document.querySelector('.spinner-container');
+      spinner.style.display = 'block';
       // const url = 'http://localhost:3000/create'
       const url = 'http://nft-creator-ws.herokuapp.com/create'
       axios.post(url,
@@ -69,6 +69,7 @@ function generate() {
         globalObj: globalObj,
       }
     ).then(function (response) {
+      imageCanvas.style.opacity = 1;
       spinner.style.display = 'none';
       console.log(response);
     })
@@ -76,97 +77,6 @@ function generate() {
       console.log(error);
     });
     }
-
-
-
-    // setTimeout(() => {
-    //     let cmdArr = [0, name];
-
-    //     let heapSpace = Module._malloc(globalObj.arr.length * globalObj.arr.BYTES_PER_ELEMENT); // 1
-    //     Module.HEAPU8.set(globalObj.arr, heapSpace); // 2
-
-    //     Module._createImageSet(heapSpace, globalObj.dpi, globalObj.w, globalObj.h, globalObj.nc, name, cmdArr.length, cmdArr);
-    //     Module._free(heapSpace);
-
-        
-    //     downloadIset();
-    // }, 500);
-}
-
-function downloadIset() {
-    let mime = "application/octet-stream";
-
-    let filenameIset = "asa.iset";
-    let filenameFset = "asa.fset";
-    let filenameFset3 = "asa.fset3";
-
-    let ext = ".iset";
-    let ext2 = ".fset";
-    let ext3 = ".fset3";
-
-    let content = Module.FS.readFile(filenameIset);
-    let contentFset = Module.FS.readFile(filenameFset);
-    let contentFset3 = Module.FS.readFile(filenameFset3);
-
-    var a = document.createElement('a');
-    a.download = name + ext;
-    a.href = URL.createObjectURL(new Blob([content], { type: mime }));
-    a.style.display = 'none';
-
-    var b = document.createElement('a');
-    b.download = name + ext2;
-    b.href = URL.createObjectURL(new Blob([contentFset], { type: mime }));
-    b.style.display = 'none';
-
-    var c = document.createElement('a');
-    c.download = name + ext3;
-    c.href = URL.createObjectURL(new Blob([contentFset3], { type: mime }));
-    c.style.display = 'none';
-
-    document.body.appendChild(a);
-    a.click();
-
-    document.body.appendChild(b);
-    b.click();
-
-    document.body.appendChild(c);
-    c.click();
-
-    var spinner = document.querySelector('.spinner-container');
-    spinner.style.display = 'none';
-
-    var okSign = document.querySelector('.checkmark-cover');
-    okSign.style.display = 'block';
-}
-
-function getUint8(str) {
-    let base64 = str.substr(23, str.length);
-    var raw = atob(base64);
-    var rawLength = raw.length;
-    var array = new Uint8Array(new ArrayBuffer(rawLength));
-
-    for (i = 0; i < rawLength; i++) {
-        array[i] = raw.charCodeAt(i);
-    }
-
-    // console.log("arr", array)
-    return array;
-}
-
-function openModal() {
-    let modalWrapper = document.getElementById("modal");
-    modalWrapper.style.display = "block";
-}
-
-function closeModal() {
-    let modalWrapper = document.getElementById("modal");
-    modalWrapper.style.display = "none";
-}
-
-function setValueFromModal() {
-    let input = document.getElementById("modalInput").value;
-    globalObj.nc = parseInt(input);
-    closeModal();
 }
 
 function detectColorSpace(arr) {
