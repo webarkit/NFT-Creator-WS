@@ -2,7 +2,6 @@
   "name": "nodegenerator",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
   "scripts": {
     "start": "node nftCreatorWS",
     "dev": "nodemon --watch nftCreatorWS"

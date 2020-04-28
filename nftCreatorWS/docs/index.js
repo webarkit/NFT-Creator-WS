@@ -26,8 +26,8 @@ var globalObj = {
 function handleImage(e) {
     nameWithExt = e.target.files[0].name;
     console.log("Image uploaded: " + nameWithExt);
-    document.getElementById('nftName').value = name;
     name = nameWithExt.substr(0, nameWithExt.lastIndexOf('.'));
+    document.getElementById('nftName').value = name;
 
     let extJpg = nameWithExt.substr(nameWithExt.lastIndexOf('.'));
 
@@ -62,8 +62,8 @@ function generate() {
       imageCanvas.style.opacity = 0.25;
       var spinner = document.querySelector('.spinner-container');
       spinner.style.display = 'block';
-      // const url = 'http://localhost:3000/create'
-      const url = 'http://nft-creator-ws.herokuapp.com/create'
+      const url = 'http://localhost:3000/create'
+      // const url = 'http://nft-creator-ws.herokuapp.com/create'
       axios.post(url,
       {
         globalObj: globalObj,

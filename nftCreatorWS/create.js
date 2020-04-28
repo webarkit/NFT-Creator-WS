@@ -187,16 +187,20 @@ function sendEmail(nftPath) {
 }
 
 function create(globalData) {
-  local = false
-  imageData = globalData;
-  imageData.sizeX = globalData.w;
-  imageData.sizeY = globalData.h;
-  imageData.array = globalData.arr;
-  imageData.ext = globalData.ext;
-  imageData.email = imageData.email || process.env.DEFAULT_EMAIL
-  noDemo = true
-  Module = require('./libs/NftMarkerCreator_wasm.js');
-  Module.onRuntimeInitialized = runtime
+  if (!Module._createImageSet) {
+    local = false
+    imageData = globalData;
+    imageData.sizeX = globalData.w;
+    imageData.sizeY = globalData.h;
+    imageData.array = globalData.arr;
+    imageData.ext = globalData.ext;
+    imageData.email = imageData.email || process.env.DEFAULT_EMAIL
+    noDemo = true
+    Module = require('./libs/NftMarkerCreator_wasm.min.js');
+    Module.onRuntimeInitialized = runtime
+  } else {
+    runtime()
+  }
 }
 
 Module.onRuntimeInitialized = runtime

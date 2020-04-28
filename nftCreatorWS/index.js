@@ -4,7 +4,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const path = require("path");
 const app = new express();
-const {create} = require('./app')
+const {create} = require('./create')
 
 process.title = "nftCreatorWS";
 
