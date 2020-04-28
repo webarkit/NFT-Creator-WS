@@ -62,8 +62,8 @@ function generate() {
       imageCanvas.style.opacity = 0.25;
       var spinner = document.querySelector('.spinner-container');
       spinner.style.display = 'block';
-      const url = 'http://localhost:3000/create'
-      // const url = 'http://nft-creator-ws.herokuapp.com/create'
+      // const url = 'http://localhost:3000/create'
+      const url = 'http://nft-creator-ws.herokuapp.com/create'
       console.log(globalObj)
       axios.post(url,
       {
