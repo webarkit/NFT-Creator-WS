@@ -63,9 +63,6 @@ var foundInputPath = {
     i: -1
 }
 
-var noConf = false;
-var noDemo = false;
-
 var imageData = {
     sizeX: 0,
     sizeY: 0,
@@ -76,35 +73,8 @@ var imageData = {
     email: process.env.DEFAULT_EMAIL
 }
 
-let local = true;
-
 function runtime() {
   let fileName = imageData.fileName || 'nft-' + uuidv4()
-  console.log('calculateQuality')
-    let confidence = calculateQuality();
-
-    let txt = " - - - - - ";
-    if(confidence.l != 0){
-        let str = txt.split(" ");
-        str.pop();
-        str.shift();
-        for(let i = 0; i < parseInt(confidence.l); i++){
-            str[i] = " *";
-        }
-        str.push(" ");
-        txt = str.join("");
-    }
-
-    console.log("\nConfidence level: [" + txt + "] %f/5 || Entropy: %f || Current max: 5.17 min: 4.6", confidence.l, confidence.e)
-
-    if(local && !noConf){
-        const answer = readlineSync.question(`\nDo you want to continue? (Y/N)\n`);
-
-        if( answer == "n"){
-            console.log("\nProcess finished by the user! \n");
-            process.exit(1);
-        }
-    }
     
     let heapSpace = Module._malloc(imageData.array.length * imageData.array.BYTES_PER_ELEMENT);
     Module.HEAPU8.set(imageData.array, heapSpace);
@@ -154,7 +124,11 @@ function runtime() {
                   }
                   else {
                     console.log('Success: Uploaded 3 files')
-                    sendEmail(nftPath+'/'+fileName)
+                    sendEmail(nftPath+'/'+fileName).then(() => {
+                      console.log('Mail sent')
+                    }).catch(err => {
+                      console.error(err)
+                    })
                   }
                 });
               }
@@ -187,23 +161,25 @@ function sendEmail(nftPath) {
 }
 
 function create(globalData) {
-  if (!Module._createImageSet) {
-    local = false
-    imageData = globalData;
-    imageData.sizeX = globalData.w;
-    imageData.sizeY = globalData.h;
-    imageData.array = globalData.arr;
-    imageData.ext = globalData.ext;
-    imageData.email = imageData.email || process.env.DEFAULT_EMAIL
-    noDemo = true
-    Module = require('./libs/NftMarkerCreator_wasm.min.js');
+  imageData = globalData;
+  imageData.sizeX = globalData.w;
+  imageData.sizeY = globalData.h;
+  imageData.array = globalData.arr;
+  imageData.ext = globalData.ext;
+  imageData.email = imageData.email || process.env.DEFAULT_EMAIL
+  if (!Module.onRuntimeInitialized) {
+    Module = require('./libs/NftMarkerCreator_wasm.js');
     Module.onRuntimeInitialized = runtime
   } else {
-    runtime()
+    // drop the module
+    Module = undefined
+    delete require.cache[require.resolve('./libs/NftMarkerCreator_wasm.js')]
+    Module = require('./libs/NftMarkerCreator_wasm.js');
+    Module.onRuntimeInitialized = runtime
   }
 }
 
-Module.onRuntimeInitialized = runtime
+// Module.onRuntimeInitialized = runtime
 
 function useJPG(buf) {
     inkjet.decode(buf, function (err, decoded) {

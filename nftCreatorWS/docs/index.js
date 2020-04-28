@@ -64,6 +64,7 @@ function generate() {
       spinner.style.display = 'block';
       const url = 'http://localhost:3000/create'
       // const url = 'http://nft-creator-ws.herokuapp.com/create'
+      console.log(globalObj)
       axios.post(url,
       {
         globalObj: globalObj,
