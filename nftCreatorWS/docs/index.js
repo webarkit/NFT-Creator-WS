@@ -63,8 +63,7 @@ function generate() {
       var spinner = document.querySelector('.spinner-container');
       spinner.style.display = 'block';
       // const url = 'http://localhost:3000/create'
-      const url = 'http://nft-creator-ws.herokuapp.com/create'
-      console.log(globalObj)
+      const url = 'http://nftcreator.tripod-digital.co.nz/create'
       axios.post(url,
       {
         globalObj: globalObj,
