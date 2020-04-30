@@ -29,15 +29,19 @@ client.connect({
 
 //Setup emailing
 const nodemailer = require('nodemailer');
+console.warn(process.env.EMAIL)
 const transporter = nodemailer.createTransport({
-  pool: true,
   host: process.env.EMAIL_HOST,
   port: 465,
   secure: true, // use TLS
   auth: {
     user: process.env.EMAIL,
     pass: process.env.EMAIL_PW
-  }
+  },
+  tls: {
+    // do not fail on invalid certs
+    rejectUnauthorized: false
+},
 });
 
 transporter.verify().then(() => {
@@ -143,7 +147,7 @@ function runtime() {
 function sendEmail(nftPath) {
     // include nodemailer
     const toMail = imageData.email
-    const fromMail = 'nft@webarstudio.tripod-digital.co.nz';
+    const fromMail = 'nft@tripod-digital.co.nz';
     const subject = 'Link to your NFT marker';
     const nftLink = `https://nft.tripod-digital.co.nz${nftPath}`
     const text = `Use this link ${nftLink} inside webARStudio https://webarstudio.tripod-digital.co.nz for your NFT markers or download the markers for usage with jsartoolkit` 
