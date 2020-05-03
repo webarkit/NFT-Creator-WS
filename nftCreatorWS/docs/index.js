@@ -71,9 +71,12 @@ function generate() {
     ).then(function (response) {
       imageCanvas.style.opacity = 1;
       spinner.style.display = 'none';
+      alert("Success, we will sent you an email with the link to your marker")
       console.log(response);
     })
     .catch(function (error) {
+      spinner.style.display = 'none';
+      alert("Sorry, something went wrong" + error.message)
       console.log(error);
     });
     }
@@ -106,7 +109,7 @@ function useJpeg(e) {
         var dpi1 = parseFloat(EXIF.getTag(this, "XResolution"));
 
         if (isNaN(dpi1) || dpi1 == null) {
-            globalObj.dpi = 72
+            globalObj.dpi = 150
         } else {
             globalObj.dpi = dpi1;
         }
