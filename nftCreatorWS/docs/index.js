@@ -173,7 +173,6 @@ function readImage(e) {
             globalObj.nc = verifyColorSpace;
 
             let uint = new Uint8Array(newArr);
-            console.log('uint', uint)
             globalObj.arr = Array.from(uint);
 
             let confidence = calculateQuality();
