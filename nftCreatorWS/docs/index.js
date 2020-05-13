@@ -42,7 +42,7 @@ function handleImage(e) {
         useJpeg(e);
     } else if (extJpg == '.png' || extJpg == '.PNG') {
         globalObj.ext = '.png'
-        globalObj.dpi = 72;
+        globalObj.dpi = 150;
         readImage(e)
     } else {
         console.log("Invalid image format!");
@@ -173,8 +173,8 @@ function readImage(e) {
             globalObj.nc = verifyColorSpace;
 
             let uint = new Uint8Array(newArr);
-
-            globalObj.arr = uint;
+            console.log('uint', uint)
+            globalObj.arr = Array.from(uint);
 
             let confidence = calculateQuality();
             let confidenceEl = document.getElementById("confidenceLevel");
