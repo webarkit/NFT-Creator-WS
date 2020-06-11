@@ -62,8 +62,9 @@ function generate() {
       imageCanvas.style.opacity = 0.25;
       var spinner = document.querySelector('.spinner-container');
       spinner.style.display = 'block';
-      // const url = 'http://localhost:3000/create'
-      const url = 'http://nftcreator.tripod-digital.co.nz/create'
+      const url = 'http://localhost:3000/create'
+      // const url = 'http://nftcreator.tripod-digital.co.nz/create'
+      console.log(globalObj)
       axios.post(url,
       {
         globalObj: globalObj,
