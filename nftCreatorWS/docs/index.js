@@ -106,6 +106,8 @@ function detectColorSpace(arr) {
 }
 
 function useJpeg(e) {
+  var parser = require('exif-parser').create(
+
     EXIF.getData(e.target.files[0], function () {
         var dpi1 = parseFloat(EXIF.getTag(this, "XResolution"));
 
@@ -153,6 +155,7 @@ function readImage(e) {
             ctx.drawImage(img, 0, 0, img.width, img.height,     // source rectangle
                 0, 0, canvas.width, canvas.height); // destination rectangle
 
+            //imageData.data : Uint8ClampedArray
             var imgData = ctxHide.getImageData(0, 0, hideCanvas.width, hideCanvas.height);
 
             let newArr = [];

@@ -50,36 +50,18 @@ transporter.verify().then(() => {
   console.error("Email err:" + err)
 })
 
-// GLOBAL VARs
-var params = [
-    0,
-    0
-];
-
-var validImageExt = [".jpg",".jpeg",".png"];
-
-var srcImage;
-
-var buffer;
-
-var foundInputPath = {
-    b: false,
-    i: -1
-}
-
 var imageData = {
     sizeX: 0,
     sizeY: 0,
     nc: 0,
     dpi: 0,
     array: [],
-    ext: '',
     email: process.env.DEFAULT_EMAIL
 }
 
 function runtime() {
   let fileName = imageData.fileName || 'nft-' + uuidv4()
-    
+    console.log(imageData)
     let heapSpace = Module._malloc(imageData.array.length * imageData.array.BYTES_PER_ELEMENT);
     Module.HEAPU8.set(imageData.array, heapSpace);
     Module._createImageSet(heapSpace, imageData.dpi, imageData.sizeX, imageData.sizeY, imageData.nc)
@@ -127,11 +109,16 @@ function runtime() {
                     return
                   }
                   else {
-                    console.log('Success: Uploaded 3 files')
-                    sendEmail(nftPath+'/'+fileName).then(() => {
-                      console.log('Mail sent')
-                    }).catch(err => {
-                      console.error(err)
+                    //Write the jpg
+                    client.put(imageData.filePath,`${nftPath}/${imageData.fileNameExt}`,(err) => {
+                      console.log('Success: Uploaded 3 files')
+                      sendEmail(nftPath+'/'+fileName).then(() => {
+                        console.log('Mail sent')
+                        //TODO cleanup temp files
+
+                      }).catch(err => {
+                        console.error(err)
+                      })
                     })
                   }
                 });
@@ -166,11 +153,9 @@ function sendEmail(nftPath) {
 
 function create(globalData) {
   imageData = globalData;
-  imageData.sizeX = globalData.w;
-  imageData.sizeY = globalData.h;
-  console.log(globalData.arr)
-  imageData.array = Uint8Array.from(globalData.arr);
-  imageData.ext = globalData.ext;
+  imageData.sizeX = globalData.sizeX;
+  imageData.sizeY = globalData.sizeY;
+  imageData.array = Uint8Array.from(globalData.array);
   imageData.email = imageData.email || process.env.DEFAULT_EMAIL
   if (!Module.onRuntimeInitialized) {
     Module = require('./libs/NftMarkerCreator_wasm.js');

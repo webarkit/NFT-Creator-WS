@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "node nftCreatorWS",
-    "dev": "nodemon --watch nftCreatorWS"
+    "start": "node --inspect-brk nftCreatorWS",
+    "dev": "nodemon --watch --inspect-brk nftCreatorWS"
   },
   "author": "",
   "license": "MIT",
@@ -12,10 +12,15 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
+    "exif": "^0.6.0",
+    "exif-parser": "^0.1.12",
     "express": "^4.17.1",
     "express-queue": "0.0.12",
+    "form-data": "^3.0.0",
+    "formidable": "^1.2.2",
     "ftp": "^0.3.10",
     "glob": "^7.1.6",
+    "image-size": "^0.8.3",
     "inkjet": "^2.1.2",
     "jpeg-js": "^0.3.6",
     "netlify-lambda": "^1.6.3",
