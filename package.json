@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "node --inspect-brk nftCreatorWS",
+    "start": "node nftCreatorWS",
+    "start:debug": "node --inspect-brk nftCreatorWS",
     "dev": "nodemon --watch --inspect-brk nftCreatorWS"
   },
   "author": "",
