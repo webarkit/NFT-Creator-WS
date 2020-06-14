@@ -1,31 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html 
+      PUBLIC "-//W3C//DTD HTML 4.01//EN"
+      "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en-US">
+<head profile="http://www.w3.org/2005/10/profile">
+  <link rel="icon" 
+      type="image/png" 
+      href="favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>NFt Marker Creator</title>
+    <title>Tripod Digital - truely magic</title>
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-
+<div class="header">
+  <div id="right"><img src="./icons/tripod_pb.png" height="45px" width="auto"></img></div>
+</div>
     <div class="container">
-        <p id="title" href="#confidenceLevel">NFT Marker Creator</p>
-        <input type="file" id="imageLoader" name="imageLoader" style="display: none;"/>
-        <form action="/create" enctype="multipart/form-data" method="post">
-          Email: <input class="in" type="email" name="email" id="email"><br>
-          Upload Image: <input id="uploadBt" class="in" type="file" name="upload" multiple="multiple"><br>
-          Marker name: <input class="in" type="text" name="nftName" id="nftName">(defaults to image name)<br>
-          <input type="submit" value="Upload" class="in">
-        </form>
+        <p id="title">Image tracking step by step</p>
+        <!-- <input type="file" id="imageLoader" name="imageLoader" style="display: none;"/> -->
+        <!-- <form action="/create" enctype="multipart/form-data" method="post"> -->
+        <div class="in">1. Enter your email: <input type="email" name="email" id="email"></div>
+        <div class="in">2. Upload your image: <input id="uploadBt" type="file" name="upload"></div>
+        <div class="in">3. Specify marker name: <input type="text" name="nftName" id="nftName"><div id="small">(defaults to image name)</div></div>
+        <button id="generateBt" class="bt in" onclick="generate()">Generate</button>
+        <div class="in">You will be sent an email with your image-target URL and forwarded to a test page.</div>
+        <div id="thanks">The forwarding currently takes approx. 1 minute. I apologize for the delay and thank you for your patience.</div>
+        <!-- </form> -->
         <!-- <div class="in">
           Email: <input type="email" id="email" name="email"/><br/>
-        </div> -->
-        <!-- <button id="uploadBt" onclick="document.getElementById('imageLoader').click();" class="bt">Upload Image</button> -->
-        <!-- <div class="in"> NFT name: <input type="text" id="nftName" name="nftName"/></div> -->
-        <!-- <button id="generateBt" onclick="generate()" class="bt" disabled>Generate</button> -->
+        </div>
+        <button id="uploadBt" onclick="document.getElementById('imageLoader').click();" class="bt">Upload Image</button>
+        <div class="in"> NFT name: <input type="text" id="nftName" name="nftName"/></div>
+        <button id="generateBt" onclick="generate()" class="bt" disabled>Generate</button> -->
         <div id="wrapper">
-            <canvas id="imageCanvas"></canvas>
+            <!-- <canvas id="imageCanvas"></canvas> -->
             <div class="spinner-container">
                 <div class="spinner"></div>
             </div>
@@ -33,13 +42,13 @@
                 <div class="tasks-list-mark"></div>
             </div>
         </div>
-        <canvas id="hideCanvas"></canvas>
-        
-        <p>Markers will be hosted for <b>up to 4 weeks</b> if you need them for longer please join our Slack channel and notify me. `@Thorsten`</p>
-        <p>Please join our <a href="https://join.slack.com/t/webarkit/shared_invite/zt-ecq9duuo-hNBNqXVfp6DRDU_5QwI~XA" target="blank">Slack channel #nftcreator</a> for help and support </p>
-        <p>Made with love by <a href="https://tripod-digital.co.nz">Tripod Digital ltd.</a></p>
-        <p>Special thanks to <a href="https://github.com/Carnaux">Carnaux</a> <a href="https://github.com/Carnaux/NFT-Marker-Creator">https://github.com/Carnaux/NFT-Marker-Creator</a><br>
-        </p>
+    </div>
+    <div class="footer">
+      <p>Markers will be hosted for <b>up to 4 weeks</b>. If you need them for longer please join our <a href="https://join.slack.com/t/webarkit/shared_invite/zt-ecq9duuo-hNBNqXVfp6DRDU_5QwI~XA" target="blank">Slack channel</a> and notify me. `@Thorsten`</p>
+      <p>Please join our <a href="https://join.slack.com/t/webarkit/shared_invite/zt-ecq9duuo-hNBNqXVfp6DRDU_5QwI~XA" target="blank">Slack channel #nftcreator</a> for help and support </p>
+      <p>Made with <img class="confidenceEl" src="./icons/heart.svg" width="10px"></img> by <a href="https://tripod-digital.co.nz">Tripod Digital ltd.</a></p>
+      <p id="thanks">Special thanks to <a href="https://github.com/Carnaux">Carnaux</a> <a href="https://github.com/Carnaux/NFT-Marker-Creator">https://github.com/Carnaux/NFT-Marker-Creator</a><br>
+      </p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

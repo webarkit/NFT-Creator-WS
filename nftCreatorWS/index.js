@@ -189,7 +189,7 @@ app.post('/create', (req, res) => {
     handleImage(files.upload.name, files.upload.type, files.upload.path).then(
       imageData => {
         imageData.email = fields.email
-        imageData.fileName = fields.nftName || files.upload.name.substr(0, nameWithExt.lastIndexOf('.'))
+        imageData.fileName = fields.fileName || files.upload.name.substr(0, files.upload.name.lastIndexOf('.'))
         imageData.fileNameExt = files.upload.name
         imageData.dpi = 200
         const sizeOf = require('image-size');
