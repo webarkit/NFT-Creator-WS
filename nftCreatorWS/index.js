@@ -4,11 +4,21 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const path = require('path')
 const app = new express()
-const { create } = require('./create')
+// const { create } = require('./create')
 const queue = require('express-queue')
 const queueMw = queue({ activeLimit: 1, queuedLimit: -1 })
 const formidable = require('formidable')
 const fs = require('fs')
+
+const { StaticPool } = require("node-worker-threads-pool");
+
+const absolutePath = path.join(__dirname + '/create.js')
+
+const pool = new StaticPool({
+  size: 4,
+  workerData: "workerData!",
+  task: absolutePath
+})
 
 process.title = 'nftCreatorWS'
 
@@ -181,6 +191,12 @@ app.post('/create', (req, res) => {
     if (err) {
       next(err)
       console.error(err)
+      res.error
+      res.status(500).send('Something broke!')
+      return
+    }
+    if (!files.upload.type.toLowerCase().includes('jpeg')) {
+      res.status(500).send('only JPG is supported at the moment.')
       return
     }
     handleImage(files.upload.name, files.upload.type, files.upload.path).then(
@@ -194,8 +210,10 @@ app.post('/create', (req, res) => {
         imageData.sizeX = dimensions.width
         imageData.sizeY = dimensions.height
         imageData.filePath = files.upload.path
-        createNFT(imageData)
-        return res.send('Success, we will sent you an email with the link to your marker');
+        pool.exec(imageData)
+        // createNFT(imageData)
+        res.sendFile(path.join(__dirname + '/docs/test.html'));
+        // return res.send('Success, we will sent you an email with the link to your marker');
       }
     )
   })

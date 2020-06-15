@@ -9,6 +9,7 @@ var Module = {};
 require('dotenv').config()
 const Client = require('ftp');
 const uuidv4 = require('uuid/v4');
+const { parentPort, workerData } = require("worker_threads");
 
 let ftpReady = false
 
@@ -61,7 +62,6 @@ var imageData = {
 
 function runtime() {
   let fileName = imageData.fileName || 'nft-' + uuidv4()
-    console.log(imageData)
     let heapSpace = Module._malloc(imageData.array.length * imageData.array.BYTES_PER_ELEMENT);
     Module.HEAPU8.set(imageData.array, heapSpace);
     Module._createImageSet(heapSpace, imageData.dpi, imageData.sizeX, imageData.sizeY, imageData.nc)
@@ -168,5 +168,10 @@ function create(globalData) {
     Module.onRuntimeInitialized = runtime
   }
 }
+
+parentPort.on("message", (param) => { 
+  create(param)
+  parentPort.postMessage("done");
+})
 
 exports.create = create;
