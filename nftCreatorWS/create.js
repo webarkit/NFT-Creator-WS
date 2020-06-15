@@ -115,6 +115,9 @@ function runtime() {
                       sendEmail(nftPath+'/'+fileName).then(() => {
                         console.log('Mail sent')
                         //TODO cleanup temp files
+                        fs.unlinkSync(filePath + ext)
+                        fs.unlinkSync(filePath + ext2)
+                        fs.unlinkSync(filePath + ext3)
 
                       }).catch(err => {
                         console.error(err)
