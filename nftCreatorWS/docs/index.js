@@ -51,12 +51,19 @@ var globalObj = {
 //     document.getElementById("generateBt").disabled = false;
 // }
 
+function validateEmail(email) {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
+
 function generate () {
   globalObj.email = document.getElementById('email').value
-  globalObj.fileName = document.getElementById('nftName').value
+  if (!validateEmail(globalObj.email)) {
+    globalObj.email = undefined
+  }
   if (!globalObj.email) {
     alert(
-      'Please enter your email address. We use this address to send you a link to your NFTs once they have been created.'
+      'Please enter a valid email address. We use this address to send you a link to your NFTs once they have been created.'
     )
     return
   }
@@ -64,6 +71,7 @@ function generate () {
     alert('Please select an image to create a marker')
     return
   }
+  globalObj.fileName = document.getElementById('nftName').value
   // var imageCanvas = document.querySelector('#imageCanvas');
   // imageCanvas.style.opacity = 0.25;
   var spinner = document.querySelector('.spinner-container')
