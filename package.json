@@ -23,7 +23,7 @@
     "glob": "^7.1.6",
     "image-size": "^0.8.3",
     "inkjet": "^2.1.2",
-    "jpeg-js": "^0.3.6",
+    "jpeg-js": "^0.4.0",
     "netlify-lambda": "^1.6.3",
     "nodemailer": "^6.4.6",
     "nodemon": "^2.0.3",

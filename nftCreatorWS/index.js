@@ -137,31 +137,28 @@ function useJpeg (path) {
   return new Promise((resolve, reject) => {
     var ExifImage = require('exif').ExifImage
     var inkjet = require('inkjet');
+    var jpeg = require('jpeg-js');
     const imageFileBuffer = fs.readFileSync(path)
 
-    inkjet.decode(imageFileBuffer, function(err, decoded) {
-      if (err) {
-        reject(err)
-      }
-      // TODO read width and height
-      try {
-        new ExifImage({ image: path }, (error, exifData) => {
-          if (error) {
-            console.error('Error: ' + error.message)
-            resolve(readImage(decoded.data))
-          } else {
-            const nc1 = exifData.exif.ComponentsConfiguration
-            const imageData = readImage(decoded.data)
-            if (nc1)
-              imageData.nc = nc1
-            resolve(imageData)
-          }
-        })
-      } catch (error) {
-        console.error('Error: ' + error.message)
-        reject(error.message)
-      }
-    })
+    var rawImageData = jpeg.decode(imageFileBuffer);
+
+    try {
+      new ExifImage({ image: path }, (error, exifData) => {
+        if (error) {
+          console.error('Error: ' + error.message)
+          resolve(readImage(rawImageData.data))
+        } else {
+          const nc1 = exifData.exif.ComponentsConfiguration
+          const imageData = readImage(rawImageData.data)
+          if (nc1)
+            imageData.nc = nc1
+          resolve(imageData)
+        }
+      })
+    } catch (error) {
+      console.error('Error: ' + error.message)
+      reject(error.message)
+    }
   })
 }
 
