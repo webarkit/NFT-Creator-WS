@@ -3561,10 +3561,10 @@ node-worker-threads-pool@^1.3.1:
   resolved "https://registry.yarnpkg.com/node-worker-threads-pool/-/node-worker-threads-pool-1.3.1.tgz#59948f42e4613459e5309de1a664ad43f58e5143"
   integrity sha512-fE9BJK3thQrDiI9SrMCeFOKpRps9lnoeID9AEEH1SC8zVSnzmhuW5xyKhob198nVBe5j/+jGvSu5N0zaXvL9zQ==
 
-nodemailer@^6.4.6:
-  version "6.4.6"
-  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-6.4.6.tgz#d37f504f6560b36616f646a606894fe18819107f"
-  integrity sha512-/kJ+FYVEm2HuUlw87hjSqTss+GU35D4giOpdSfGp7DO+5h6RlJj7R94YaYHOkoxu1CSaM0d3WRBtCzwXrY6MKA==
+nodemailer@^6.4.16:
+  version "6.4.16"
+  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-6.4.16.tgz#5cb6391b1d79ab7eff32d6f9f48366b5a7117293"
+  integrity sha512-68K0LgZ6hmZ7PVmwL78gzNdjpj5viqBdFqKrTtr9bZbJYj6BRj5W6WGkxXrEnUl3Co3CBXi3CZBUlpV/foGnOQ==
 
 nodemon@^2.0.3:
   version "2.0.3"
